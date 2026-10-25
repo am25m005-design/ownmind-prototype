@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OWNMIND - Zero-Trust Cognitive Firewall | Flipkart APM '29</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX CSS & JS for clean math formatting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#1A56DB',
+                            darkNavy: '#0F172A',
+                            purple: '#7C3AED',
+                            emerald: '#059669',
+                            amber: '#D97706',
+                            rose: '#DC2626',
+                            bgGray: '#F8FAFC'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #F8FAFC;
+            color: #0F172A;
+        }
+        .katex-display {
+            margin: 0.4em 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 4px 0;
+        }
+        .sovereignty-tier {
+            transition: all 0.25s ease;
+        }
+        .sovereignty-tier.active {
+            transform: scale(1.02);
+            box-shadow: 0 4px 16px rgba(26, 86, 219, 0.18);
+            border-width: 2px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800 antialiased">
+
+    <!-- TOP HEADER & SUBMISSION BAR -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center py-3.5 gap-3">
+                
+                <!-- Logo & Tagline -->
+                <div class="flex items-center space-x-3">
+                    <div class="bg-brand-blue text-white font-extrabold text-xl px-3.5 py-2 rounded-xl flex items-center gap-2 shadow-md">
+                        <i class="fa-solid fa-shield-halved text-amber-300"></i> OWNMIND
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] uppercase tracking-wider font-bold text-brand-blue bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
+                                Flipkart APM '29 Case Study
+                            </span>
+                            <span class="text-[10px] uppercase tracking-wider font-bold text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded-md border border-purple-200">
+                                2040 Horizon
+                            </span>
+                        </div>
+                        <h1 class="text-xs text-slate-500 font-medium hidden sm:block mt-0.5">Zero-Trust Cognitive Firewall & Human Agency Preserver</h1>
+                    </div>
+                </div>
+
+                <!-- User & Agency Index Header Bar -->
+                <div class="flex items-center gap-2.5 text-xs sm:text-sm bg-slate-50 p-2 rounded-xl border border-slate-200">
+                    <div class="flex items-center gap-1.5 px-2">
+                        <i class="fa-solid fa-user-circle text-slate-400 text-sm"></i>
+                        <input type="text" id="userName" value="Alex Sharma" placeholder="User Name" class="bg-transparent font-semibold text-slate-800 focus:outline-none w-24 sm:w-28 border-b border-dashed border-slate-300">
+                    </div>
+                    <span class="text-slate-300">|</span>
+                    <div class="flex items-center gap-1.5 px-2">
+                        <i class="fa-solid fa-brain text-brand-blue"></i>
+                        <span class="text-slate-500 text-xs font-medium">HAI:</span>
+                        <span id="headerHaiScore" class="font-extrabold text-brand-blue text-sm">88%</span>
+                    </div>
+                    <button onclick="downloadSubmission()" class="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs px-3.5 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-download text-amber-400"></i> <span class="hidden md:inline">Export</span> Summary
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- TAB NAVIGATION -->
+            <nav class="flex space-x-2 sm:space-x-8 border-t border-slate-100 pt-2 overflow-x-auto text-xs sm:text-sm font-medium">
+                <button onclick="switchTab('sandbox')" id="tab-sandbox" class="tab-btn py-2.5 px-3.5 border-b-2 border-brand-blue text-brand-blue font-bold flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-shield-cat"></i> 1. Interceptor Sandbox
+                </button>
+                <button onclick="switchTab('compare')" id="tab-compare" class="tab-btn py-2.5 px-3.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-scale-balanced"></i> 2. Unprotected vs OWNMIND
+                </button>
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn py-2.5 px-3.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-chart-pie"></i> 3. Human Agency Dashboard
+                </button>
+                <button onclick="switchTab('summary')" id="tab-summary" class="tab-btn py-2.5 px-3.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-file-contract"></i> 4. APM Case Study Strategy
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- ======================================================== -->
+        <!-- TAB 1: COGNITIVE INTERCEPTOR SANDBOX                    -->
+        <!-- ======================================================== -->
+        <section id="view-sandbox" class="tab-content space-y-6">
+            
+            <!-- SCENARIO SELECTOR BAR -->
+            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-400 tracking-wider mb-2">Select 2040 Agent Interception Scenario</label>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="loadScenario('mobility')" id="scen-mobility" class="scen-btn px-3.5 py-2 rounded-xl text-xs font-bold border bg-brand-blue text-white border-brand-blue transition flex items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-car-side"></i> Dynamic Vehicle Lease
+                        </button>
+                        <button onclick="loadScenario('mortgage')" id="scen-mortgage" class="scen-btn px-3.5 py-2 rounded-xl text-xs font-bold border bg-white text-slate-700 border-slate-300 hover:bg-slate-50 transition flex items-center gap-2">
+                            <i class="fa-solid fa-building-columns"></i> Algorithmic Mortgage Audit
+                        </button>
+                        <button onclick="loadScenario('telemetry')" id="scen-telemetry" class="scen-btn px-3.5 py-2 rounded-xl text-xs font-bold border bg-white text-slate-700 border-slate-300 hover:bg-slate-50 transition flex items-center gap-2">
+                            <i class="fa-solid fa-user-shield"></i> Telemetry & Privacy Shield
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50/80 border border-blue-200 text-blue-900 text-xs px-3.5 py-2.5 rounded-xl flex items-center gap-2.5 max-w-md">
+                    <i class="fa-solid fa-lightbulb text-amber-500 text-base flex-shrink-0"></i>
+                    <span class="leading-relaxed"><strong>OWNMIND Rule:</strong> High-stakes contracts require brief Socratic human verification before execution to prevent logic decay and vendor dark patterns.</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- LEFT COLUMN: 5-STEP SCAFFOLDING WORKFLOW (8 cols) -->
+                <div class="lg:col-span-8 space-y-5">
+
+                    <!-- STEP 1: THE INTERCEPTED TASK -->
+                    <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                        <div id="riskBadge" class="inline-flex items-center gap-1.5 bg-rose-100 text-rose-700 text-xs font-extrabold px-3 py-1 rounded-full mb-3">
+                            <i class="fa-solid fa-triangle-exclamation"></i> RED TIER RISK INTERCEPTED
+                        </div>
+                        <h2 class="text-xs uppercase tracking-wider font-extrabold text-brand-blue mb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-hand-paper"></i> Step 1: Background Agent Task Intercepted
+                        </h2>
+                        <h3 id="prob-title" class="text-lg font-bold text-slate-900 mb-2">2040 Autonomous Vehicle Dynamic Lease Contract</h3>
+                        <p id="prob-desc" class="text-sm text-slate-600 leading-relaxed mb-3">
+                            Your background personal AI agent prepared to auto-sign a 36-month mobility lease on Flipkart Mobility. OWNMIND detected a dynamic surge clause inserted by the vendor's negotiation agent.
+                        </p>
+                        
+                        <!-- RENDERED MATH EQUATION BOX -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 my-3 text-center">
+                            <span class="text-[11px] text-slate-400 font-bold block mb-1 uppercase tracking-wider">VENDOR DYNAMIC COST FORMULA</span>
+                            <div id="prob-math" class="text-base sm:text-lg font-mono text-slate-800 py-1">
+                                $$C(t) = C_0 \cdot \left(1 + \alpha \cdot \text{Surge}(t)\right)$$
+                            </div>
+                        </div>
+
+                        <p id="prob-question" class="text-sm font-semibold text-slate-800 mt-2 leading-relaxed">
+                            Question: If base cost $C_0 = \text{₹15,000/mo}$ and surge factor $\alpha = 0.20$, what is your peak monthly exposure during congestion hours?
+                        </p>
+                    </div>
+
+                    <!-- STEP 2: TRY FIRST (LOGIC LOG) -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative">
+                        <div class="flex justify-between items-center mb-2">
+                            <h2 class="text-xs uppercase tracking-wider font-extrabold text-slate-700 flex items-center gap-1.5">
+                                <i class="fa-solid fa-pen-nib text-brand-blue"></i> Step 2: Log Your Initial Thought / Sanity Check
+                            </h2>
+                            <span class="bg-slate-100 text-slate-600 text-[11px] font-bold px-2.5 py-0.5 rounded-md">
+                                Step 2 of 5
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-2.5">Before viewing Socratic hints, log your initial mental estimate or calculation idea:</p>
+                        
+                        <div class="space-y-3">
+                            <textarea id="userAttempt" rows="2" placeholder="Example: Peak exposure increases base cost by 20%, so ₹15,000 * 1.20 = ₹18,000/mo..." class="w-full text-sm p-3 rounded-xl border border-slate-300 focus:border-brand-blue focus:ring-1 focus:ring-brand-blue focus:outline-none transition"></textarea>
+                            
+                            <div class="flex justify-between items-center">
+                                <button onclick="saveAttempt()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-sm">
+                                    <i class="fa-solid fa-floppy-disk text-amber-400"></i> Submit Logic Thought
+                                </button>
+                                <span id="attemptStatus" class="text-xs font-bold text-emerald-600 hidden flex items-center gap-1">
+                                    <i class="fa-solid fa-circle-check"></i> Logic logged! Human agency score active.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: SOCRATIC HINT LADDER -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative">
+                        <div class="flex justify-between items-center mb-2">
+                            <h2 class="text-xs uppercase tracking-wider font-extrabold text-amber-600 flex items-center gap-1.5">
+                                <i class="fa-solid fa-stairs"></i> Step 3: Progressive Socratic Hint Ladder
+                            </h2>
+                            <span class="bg-amber-100 text-amber-900 text-[11px] font-bold px-2.5 py-0.5 rounded-md">
+                                Step 3 of 5
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-3">Obtain micro-nudges instead of total answer delegation. Revealing hints slightly adjusts your Human Agency Index.</p>
+
+                        <div class="space-y-3">
+                            
+                            <!-- HINT LEVEL 1 -->
+                            <div class="border border-slate-200 rounded-xl p-3.5 bg-slate-50">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-feather text-amber-500"></i> Nudge 1: Qualitative Principle
+                                    </span>
+                                    <button onclick="revealHint(1)" id="btn-hint-1" class="text-xs bg-amber-500 hover:bg-amber-600 text-white font-bold px-3 py-1.5 rounded-lg transition shadow-sm">
+                                        Reveal Nudge
+                                    </button>
+                                </div>
+                                <div id="content-hint-1" class="hidden text-xs text-slate-700 mt-2 pt-2 border-t border-slate-200">
+                                    <p id="text-hint-1">Peak surge occurs when $\text{Surge}(t) = 1.0$. Evaluate $(1 + \alpha)$ as a percentage increase on the base rate.</p>
+                                </div>
+                            </div>
+
+                            <!-- HINT LEVEL 2 -->
+                            <div class="border border-slate-200 rounded-xl p-3.5 bg-slate-50">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-calculator text-brand-blue"></i> Nudge 2: Algebraic Breakdown
+                                    </span>
+                                    <button onclick="revealHint(2)" id="btn-hint-2" class="text-xs bg-slate-200 text-slate-400 px-3 py-1.5 rounded-lg font-bold cursor-not-allowed" disabled>
+                                        Locked
+                                    </button>
+                                </div>
+                                <div id="content-hint-2" class="hidden text-xs text-slate-700 mt-2 pt-2 border-t border-slate-200">
+                                    <p id="text-hint-2">Substitute $C_0 = 15,000$ and $\alpha = 0.20$: $C_{\text{peak}} = 15,000 \cdot (1 + 0.20) = 15,000 \cdot 1.20$.</p>
+                                </div>
+                            </div>
+
+                            <!-- HINT LEVEL 3 -->
+                            <div class="border border-slate-200 rounded-xl p-3.5 bg-slate-50">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-check-double text-purple-600"></i> Nudge 3: Final Worked Step
+                                    </span>
+                                    <button onclick="revealHint(3)" id="btn-hint-3" class="text-xs bg-slate-200 text-slate-400 px-3 py-1.5 rounded-lg font-bold cursor-not-allowed" disabled>
+                                        Locked
+                                    </button>
+                                </div>
+                                <div id="content-hint-3" class="hidden text-xs text-slate-700 mt-2 pt-2 border-t border-slate-200">
+                                    <p id="text-hint-3">$15,000 \times 1.20 = 18,000$. The surge clause adds ₹3,000/month in peak hours.</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- STEP 4: INTERACTIVE CHECK -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative">
+                        <div class="flex justify-between items-center mb-2">
+                            <h2 class="text-xs uppercase tracking-wider font-extrabold text-emerald-600 flex items-center gap-1.5">
+                                <i class="fa-solid fa-square-check"></i> Step 4: Verify Contract Option
+                            </h2>
+                            <span class="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2.5 py-0.5 rounded-md">
+                                Step 4 of 5
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-3">Select the correct audited option to approve or counter-offer:</p>
+
+                        <div class="space-y-2">
+                            <div id="mcq-options" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                <!-- Options dynamically rendered -->
+                            </div>
+                            <div id="feedback-box" class="hidden mt-3 p-3.5 rounded-xl text-xs font-medium"></div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 5: UNASSISTED TRANSFER CHECK -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative">
+                        <div class="flex justify-between items-center mb-2">
+                            <h2 class="text-xs uppercase tracking-wider font-extrabold text-purple-600 flex items-center gap-1.5">
+                                <i class="fa-solid fa-bullseye"></i> Step 5: Unassisted Transfer (Verify Logic)
+                            </h2>
+                            <span class="bg-purple-100 text-purple-800 text-[11px] font-bold px-2.5 py-0.5 rounded-md">
+                                Step 5 of 5
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-2.5">Test your critical thinking on a revised scenario without hint assistance!</p>
+
+                        <div class="bg-purple-50/60 p-4 rounded-xl border border-purple-100 space-y-3">
+                            <p id="transfer-question" class="text-xs text-slate-800 font-semibold leading-relaxed">
+                                Calculate peak monthly cost if base rate $C_0 = \text{₹20,000}$ and vendor surge factor $\alpha = 0.15$.
+                            </p>
+                            
+                            <div class="flex items-center gap-2.5">
+                                <input type="number" id="transferInput" placeholder="Enter number e.g. 23000" class="p-2.5 text-xs border border-slate-300 rounded-xl w-44 focus:outline-none focus:border-purple-600 transition">
+                                <span class="text-xs text-slate-500 font-bold">₹ / month</span>
+                                <button onclick="checkTransfer()" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-sm">
+                                    Verify Math
+                                </button>
+                            </div>
+                            <div id="transferFeedback" class="hidden text-xs font-bold mt-1"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- RIGHT COLUMN: COGNITIVE SOVEREIGNTY METER & PYRAMID (4 cols) -->
+                <div class="lg:col-span-4 space-y-5">
+
+                    <!-- HUMAN AGENCY INDEX (HAI) METER -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Human Agency Index (HAI)</h3>
+                            <span id="indepScore" class="text-2xl font-black text-brand-blue">100%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden mb-2.5">
+                            <div id="scoreBar" class="bg-brand-blue h-3 rounded-full transition-all duration-500" style="width: 100%"></div>
+                        </div>
+                        <p id="scoreExplanation" class="text-xs text-slate-500 leading-relaxed">
+                            Evaluating contract logic with fewer hints preserves your cognitive sovereignty and boosts your HAI!
+                        </p>
+                    </div>
+
+                    <!-- COGNITIVE SOVEREIGNTY PYRAMID -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-layer-group text-brand-blue"></i> Cognitive Sovereignty Stack
+                            </h3>
+                            <span class="text-[10px] bg-blue-50 text-brand-blue px-2.5 py-0.5 rounded-full font-bold">Live Depth</span>
+                        </div>
+                        
+                        <p class="text-xs text-slate-500 mb-3 leading-relaxed">
+                            OWNMIND elevates you from blind automation up to sovereign choice.
+                        </p>
+
+                        <!-- PYRAMID STACK -->
+                        <div class="space-y-1.5 text-xs font-bold text-center">
+                            
+                            <!-- Level 6: Sovereign Choice -->
+                            <div id="bloom-6" class="sovereignty-tier p-2.5 bg-purple-100 text-purple-900 border border-purple-300 rounded-xl">
+                                <div class="flex justify-between items-center px-2">
+                                    <span>6. SOVEREIGN CHOICE</span>
+                                    <span class="text-[10px] font-normal">Unassisted Transfer</span>
+                                </div>
+                            </div>
+
+                            <!-- Level 5: Logic Audit -->
+                            <div id="bloom-5" class="sovereignty-tier p-2.5 bg-indigo-100 text-indigo-900 border border-indigo-300 rounded-xl">
+                                <div class="flex justify-between items-center px-2">
+                                    <span>5. CRITICAL AUDIT</span>
+                                    <span class="text-[10px] font-normal">Option Verification</span>
+                                </div>
+                            </div>
+
+                            <!-- Level 4: Deconstruction -->
+                            <div id="bloom-4" class="sovereignty-tier p-2.5 bg-blue-100 text-blue-900 border border-blue-300 rounded-xl">
+                                <div class="flex justify-between items-center px-2">
+                                    <span>4. DECONSTRUCTION</span>
+                                    <span class="text-[10px] font-normal">Logged Initial Thought</span>
+                                </div>
+                            </div>
+
+                            <!-- Level 3: Guided Check -->
+                            <div id="bloom-3" class="sovereignty-tier p-2.5 bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-xl active">
+                                <div class="flex justify-between items-center px-2">
+                                    <span>3. GUIDED CHECK ★</span>
+                                    <span class="text-[10px] font-bold">Interception Sandbox</span>
+                                </div>
+                            </div>
+
+                            <!-- Level 2: Passive Nudge -->
+                            <div id="bloom-2" class="sovereignty-tier p-2.5 bg-amber-100 text-amber-900 border border-amber-300 rounded-xl">
+                                <div class="flex justify-between items-center px-2">
+                                    <span>2. PASSIVE NUDGE</span>
+                                    <span class="text-[10px] font-normal">Grasp Hints</span>
+                                </div>
+                            </div>
+
+                            <!-- Level 1: Blind Automation -->
+                            <div id="bloom-1" class="sovereignty-tier p-2.5 bg-slate-100 text-slate-600 border border-slate-300 rounded-xl">
+                                <div class="flex justify-between items-center px-2">
+                                    <span>1. BLIND AUTOMATION</span>
+                                    <span class="text-[10px] font-normal">Raw Agent Execution</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- 2040 PROTECTION INSIGHT CARD -->
+                    <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-5 rounded-2xl shadow-sm space-y-2">
+                        <div class="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider">
+                            <i class="fa-solid fa-shield-halved"></i> 2040 Protection Insight
+                        </div>
+                        <h4 class="text-sm font-bold">Why Raw AI Execution Causes Atrophy</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            When AI agents invisibly sign contracts in the background, human critical thinking drops to 0%. OWNMIND protects your decision-making capacity while stopping merchant agent exploitation.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- TAB 2: UNPROTECTED AGENT VS OWNMIND FIREWALL            -->
+        <!-- ======================================================== -->
+        <section id="view-compare" class="tab-content hidden space-y-6">
+            
+            <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm text-center max-w-3xl mx-auto space-y-2">
+                <span class="text-xs uppercase font-extrabold text-brand-blue tracking-wider bg-blue-50 px-3 py-1 rounded-full">Comparative Simulation</span>
+                <h2 class="text-xl font-black text-slate-900">Unprotected Agentic Auto-Execution vs. OWNMIND Sovereign Mode</h2>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    See what happens in 2040 when an external vendor agent attempts background dynamic pricing against your personal agent.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- UNPROTECTED SIDE -->
+                <div class="bg-white rounded-2xl border border-rose-200 shadow-sm overflow-hidden flex flex-col">
+                    <div class="bg-rose-50 border-b border-rose-100 p-4 flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <div class="bg-rose-600 text-white p-2 rounded-xl text-xs flex items-center justify-center w-8 h-8">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-rose-900">Unprotected Personal AI Agent</h3>
+                                <p class="text-[11px] text-rose-600 font-medium">Invisible Auto-Execution Mode</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-extrabold bg-rose-100 text-rose-800 px-2.5 py-1 rounded-full">Atrophy & Exploitation Risk</span>
+                    </div>
+
+                    <div class="p-5 flex-grow space-y-3 font-mono text-xs bg-slate-50">
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+                            <span class="text-slate-400 block text-[10px] font-bold mb-1">BACKGROUND TASK QUEUE:</span>
+                            <span class="text-slate-800">"Auto-renew annual home insurance and mobility subscription."</span>
+                        </div>
+                        <div class="bg-rose-50/70 p-3.5 rounded-xl border border-rose-200 text-slate-800 space-y-2">
+                            <span class="text-rose-700 font-bold block text-[10px]">VENDOR AGENT EXPLOITATION:</span>
+                            <p>Merchant agent detected user stress telemetry &rarr; Applied 18% urgency surcharge.</p>
+                            <p class="font-bold text-rose-900">Result: Auto-signed ₹48,000/yr (₹7,300 overcharged)</p>
+                            <p class="text-slate-500 italic">[User was never prompted or notified]</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-rose-50/80 p-4 border-t border-rose-100 space-y-1.5">
+                        <h4 class="text-xs font-bold text-rose-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-xmark text-rose-600"></i> Human Impact:
+                        </h4>
+                        <ul class="text-xs text-rose-800 space-y-1 list-disc list-inside leading-relaxed">
+                            <li>Zero human visibility or evaluation.</li>
+                            <li>Dynamic price gouging successfully exploited.</li>
+                            <li>Human Agency Index drops to 0%.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- OWNMIND FIREWALL SIDE -->
+                <div class="bg-white rounded-2xl border border-emerald-200 shadow-sm overflow-hidden flex flex-col">
+                    <div class="bg-emerald-50 border-b border-emerald-100 p-4 flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <div class="bg-brand-blue text-white p-2 rounded-xl text-xs flex items-center justify-center w-8 h-8">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900">OWNMIND Cognitive Firewall</h3>
+                                <p class="text-[11px] text-emerald-700 font-medium">Zero-Trust Socratic Governor</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-extrabold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full">Sovereign Protection</span>
+                    </div>
+
+                    <div class="p-5 flex-grow space-y-3 font-mono text-xs bg-slate-50">
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+                            <span class="text-slate-400 block text-[10px] font-bold mb-1">BACKGROUND TASK QUEUE:</span>
+                            <span class="text-slate-800">"Auto-renew annual home insurance and mobility subscription."</span>
+                        </div>
+                        <div class="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200 text-slate-800 space-y-2">
+                            <span class="text-emerald-800 font-bold block text-[10px]">OWNMIND FIREWALL INTERCEPT:</span>
+                            <p>1. Stripped emotional telemetry &rarr; Blocked urgency surcharge.</p>
+                            <p>2. Initiated 30-sec Socratic check to verify rate formula.</p>
+                            <p class="font-bold text-emerald-900">Result: Signed ₹40,700/yr (Zero markup)</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-emerald-50/80 p-4 border-t border-emerald-100 space-y-1.5">
+                        <h4 class="text-xs font-bold text-emerald-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-check text-emerald-600"></i> Human Impact:
+                        </h4>
+                        <ul class="text-xs text-emerald-800 space-y-1 list-disc list-inside leading-relaxed">
+                            <li>Protects financial capital & strips dark patterns.</li>
+                            <li>Keeps human reasoning sharp and active.</li>
+                            <li>Maintains high 92%+ Human Agency Index.</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- TAB 3: HUMAN AGENCY DASHBOARD                            -->
+        <!-- ======================================================== -->
+        <section id="view-dashboard" class="tab-content hidden space-y-6">
+            
+            <!-- STATS OVERVIEW CARDS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Human Agency Index</span>
+                        <span class="text-2xl font-black text-brand-blue">88%</span>
+                        <span class="text-[11px] text-emerald-600 font-bold block mt-1">↑ +5% this week</span>
+                    </div>
+                    <div class="bg-blue-50 text-brand-blue p-3.5 rounded-2xl text-xl flex items-center justify-center w-12 h-12">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Dark Patterns Blocked</span>
+                        <span class="text-2xl font-black text-rose-600">42 Prompts</span>
+                        <span class="text-[11px] text-slate-500 block mt-1">Zero price gouging</span>
+                    </div>
+                    <div class="bg-rose-50 text-rose-600 p-3.5 rounded-2xl text-xl flex items-center justify-center w-12 h-12">
+                        <i class="fa-solid fa-shield-virus"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Atrophy Resistance</span>
+                        <span class="text-2xl font-black text-emerald-600">91% Score</span>
+                        <span class="text-[11px] text-slate-500 block mt-1">Top 3% in active users</span>
+                    </div>
+                    <div class="bg-emerald-50 text-emerald-600 p-3.5 rounded-2xl text-xl flex items-center justify-center w-12 h-12">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Avg Intercept Time</span>
+                        <span class="text-2xl font-black text-purple-600">38 sec</span>
+                        <span class="text-[11px] text-slate-500 block mt-1">Zero task friction</span>
+                    </div>
+                    <div class="bg-purple-50 text-purple-600 p-3.5 rounded-2xl text-xl flex items-center justify-center w-12 h-12">
+                        <i class="fa-solid fa-stopwatch"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- DOMAIN SOVEREIGNTY BREAKDOWN -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Cognitive Sovereignty Domain Breakdown</h3>
+                
+                <div class="space-y-4 text-xs">
+                    <div>
+                        <div class="flex justify-between font-bold mb-1.5">
+                            <span class="text-slate-800">Financial & Contract Auditability</span>
+                            <span class="text-brand-blue font-extrabold">92% Sovereignty</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5">
+                            <div class="bg-brand-blue h-2.5 rounded-full" style="width: 92%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between font-bold mb-1.5">
+                            <span class="text-slate-800">Telemetry & Psychological Privacy</span>
+                            <span class="text-emerald-600 font-extrabold">95% Sovereignty</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5">
+                            <div class="bg-emerald-500 h-2.5 rounded-full" style="width: 95%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between font-bold mb-1.5">
+                            <span class="text-slate-800">Career & Contract Negotiations</span>
+                            <span class="text-amber-600 font-extrabold">78% Sovereignty</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5">
+                            <div class="bg-amber-500 h-2.5 rounded-full" style="width: 78%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RECENT INTERCEPTION LOG TABLE -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-4 border-b border-slate-200 font-bold text-xs uppercase tracking-wider text-slate-700">
+                    Recent Agent Task Interceptions
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-600">
+                        <thead class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-wider">
+                            <tr>
+                                <th class="p-3.5">Timestamp</th>
+                                <th class="p-3.5">Intercepted Scenario</th>
+                                <th class="p-3.5">Risk Level</th>
+                                <th class="p-3.5">Socratic Hints</th>
+                                <th class="p-3.5">Transfer Check</th>
+                                <th class="p-3.5">HAI Impact</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium">
+                            <tr>
+                                <td class="p-3.5">Today, 4:10 PM</td>
+                                <td class="p-3.5 font-bold text-slate-900">2040 Dynamic Vehicle Lease</td>
+                                <td class="p-3.5"><span class="bg-rose-100 text-rose-800 text-[10px] px-2.5 py-0.5 rounded-full font-extrabold">Red Tier</span></td>
+                                <td class="p-3.5 text-amber-600 font-semibold">1 Nudge</td>
+                                <td class="p-3.5"><span class="bg-emerald-100 text-emerald-800 text-[10px] px-2.5 py-0.5 rounded-full font-bold">Verified</span></td>
+                                <td class="p-3.5 font-extrabold text-brand-blue">+2.5%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5">Yesterday, 11:20 AM</td>
+                                <td class="p-3.5 font-bold text-slate-900">Algorithmic Mortgage Contract Audit</td>
+                                <td class="p-3.5"><span class="bg-amber-100 text-amber-800 text-[10px] px-2.5 py-0.5 rounded-full font-extrabold">Yellow Tier</span></td>
+                                <td class="p-3.5 text-amber-600 font-semibold">2 Hints</td>
+                                <td class="p-3.5"><span class="bg-emerald-100 text-emerald-800 text-[10px] px-2.5 py-0.5 rounded-full font-bold">Verified</span></td>
+                                <td class="p-3.5 font-extrabold text-brand-blue">+1.8%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5">3 days ago</td>
+                                <td class="p-3.5 font-bold text-slate-900">Telemetry Privacy & Exploitation Shield</td>
+                                <td class="p-3.5"><span class="bg-blue-100 text-blue-800 text-[10px] px-2.5 py-0.5 rounded-full font-extrabold">Green Tier</span></td>
+                                <td class="p-3.5 text-emerald-600 font-semibold">0 Hints (Solo)</td>
+                                <td class="p-3.5"><span class="bg-emerald-100 text-emerald-800 text-[10px] px-2.5 py-0.5 rounded-full font-bold">Verified</span></td>
+                                <td class="p-3.5 font-extrabold text-brand-blue">+4.0%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- TAB 4: CASE STUDY SUMMARY (FLIPKART APM STRATEGY)        -->
+        <!-- ======================================================== -->
+        <section id="view-summary" class="tab-content hidden space-y-6">
+            
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div>
+                        <span class="text-xs uppercase font-extrabold text-brand-blue tracking-wider">APM Executive Proposal</span>
+                        <h2 class="text-xl font-black text-slate-900">OWNMIND Product Strategy & Case Study</h2>
+                    </div>
+                    <span class="bg-blue-50 text-brand-blue text-xs font-bold px-3 py-1 rounded-full">Flipkart APM '29 Submission</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 py-2">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase mb-1">1. The 2040 Problem</h3>
+                        <p class="text-xs text-slate-700 leading-relaxed">Personal AI agents auto-sign decisions invisibly, causing severe cognitive atrophy and enabling vendor dark-pattern exploitation.</p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase mb-1">2. OWNMIND Solution</h3>
+                        <p class="text-xs text-slate-700 leading-relaxed">A zero-trust cognitive firewall injecting 5-step Socratic friction to preserve human critical thinking and agency.</p>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase mb-1">3. Strategic Impact</h3>
+                        <p class="text-xs text-slate-700 leading-relaxed">Establishes Flipkart as the safest, most trusted agentic marketplace in 2040 with unbeatable consumer trust moats.</p>
+                    </div>
+                </div>
+
+                <!-- DETAILED APM SECTIONS -->
+                <div class="space-y-4 text-xs text-slate-700 leading-relaxed pt-2">
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm mb-1">Product Vision & Architecture</h4>
+                        <p>
+                            OWNMIND transforms the 2040 agentic paradigm by ensuring AI agents remain tools for human amplification rather than substitutes for human consciousness. By sanitizing behavioral telemetry and forcing micro-Socratic checks during high-risk executions, OWNMIND guarantees both financial safety and neural fitness.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm mb-1">Key Efficacy Metrics (KPIs)</h4>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center mt-2.5">
+                            <div class="p-3 border rounded-xl bg-blue-50/50">
+                                <span class="block font-black text-brand-blue text-base">88%</span>
+                                <span class="text-[10px] text-slate-500 font-medium">Target Human Agency Index</span>
+                            </div>
+                            <div class="p-3 border rounded-xl bg-emerald-50/50">
+                                <span class="block font-black text-emerald-600 text-base">&gt; 98%</span>
+                                <span class="text-[10px] text-slate-500 font-medium">Dark Patterns Blocked</span>
+                            </div>
+                            <div class="p-3 border rounded-xl bg-amber-50/50">
+                                <span class="block font-black text-amber-600 text-base">&lt; 45s</span>
+                                <span class="text-[10px] text-slate-500 font-medium">Avg Intercept Duration</span>
+                            </div>
+                            <div class="p-3 border rounded-xl bg-purple-50/50">
+                                <span class="block font-black text-purple-600 text-base">78%</span>
+                                <span class="text-[10px] text-slate-500 font-medium">Unassisted Logic Accuracy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <span>OWNMIND Interactive APM Prototype &copy; 2040 Flipkart Agentic Commerce Protection Engine</span>
+            <div class="flex gap-4">
+                <a href="#" onclick="switchTab('sandbox')" class="text-brand-blue font-semibold hover:underline">Interceptor Sandbox</a>
+                <a href="#" onclick="switchTab('summary')" class="text-brand-blue font-semibold hover:underline">APM Case Study</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+    <script>
+        // DATA STRUCTURE FOR 2040 SCENARIOS WITH PROPER LATEX FORMULAS
+        const scenarios = {
+            mobility: {
+                riskTier: "RED TIER RISK INTERCEPTED",
+                title: "2040 Dynamic Vehicle Lease Contract",
+                desc: "Your background AI agent prepared to auto-sign a 36-month mobility lease on Flipkart Mobility. OWNMIND intercepted a dynamic surge clause inserted by the vendor's negotiation agent.",
+                math: "$$C(t) = C_0 \\cdot \\left(1 + \\alpha \\cdot \\text{Surge}(t)\\right)$$",
+                question: "Question: If base cost $C_0 = \\text{₹15,000/mo}$ and surge factor $\\alpha = 0.20$, what is your peak monthly exposure during congestion hours?",
+                hint1: "Peak surge occurs when $\\text{Surge}(t) = 1.0$. Evaluate $(1 + \\alpha)$ as a percentage increase on the base rate.",
+                hint2: "Substitute $C_0 = 15,000$ and $\\alpha = 0.20$: $C_{\\text{peak}} = 15,000 \\cdot (1 + 0.20) = 15,000 \\cdot 1.20$.",
+                hint3: "$15,000 \\times 1.20 = 18,000$. The surge clause adds ₹3,000/month in peak hours.",
+                mcq: [
+                    { text: "$$C_{\\text{peak}} = \\text{₹18,000/month}$$", correct: true, expl: "Correct! You correctly audited the 20% surge rate before signing." },
+                    { text: "$$C_{\\text{peak}} = \\text{₹15,200/month}$$", correct: false, expl: "Incorrect. Remember $\\alpha = 0.20$ represents a 20% multiplier, not ₹200." },
+                    { text: "$$C_{\\text{peak}} = \\text{₹16,500/month}$$", correct: false, expl: "Incorrect. Check your math calculation again." },
+                    { text: "$$C_{\\text{peak}} = \\text{₹20,000/month}$$", correct: false, expl: "Incorrect. The cap is based on $15,000 \\times 1.20$." }
+                ],
+                transferQuestion: "Calculate peak monthly cost if base rate $C_0 = \\text{₹20,000}$ and surge factor $\\alpha = 0.15$.",
+                transferAnswer: 23000
+            },
+            mortgage: {
+                riskTier: "YELLOW TIER RISK INTERCEPTED",
+                title: "Algorithmic Dynamic Mortgage Contract Audit",
+                desc: "Your personal agent wants to auto-sign a 10-year variable rate mortgage. OWNMIND detected a hidden vendor risk penalty multiplier in the interest rate equation.",
+                math: "$$R_{\\text{effective}} = R_{\\text{base}} + \\beta \\cdot \\left(1 + \\text{Volatility}\\right)$$",
+                question: "Question: What is the effective annual interest rate if base rate $R_{\\text{base}} = 6.5\\%$, markup coefficient $\\beta = 1.2\\%$, and Volatility = 0.50?",
+                hint1: "Calculate the markup adjustment: $\\beta \\cdot (1 + \\text{Volatility}) = 1.2\\% \\cdot (1 + 0.50)$.",
+                hint2: "$1.2\\% \\times 1.50 = 1.80\\%$. Add this to base rate $6.5\\%$.",
+                hint3: "$6.5\\% + 1.80\\% = 8.30\\%$ effective annual rate.",
+                mcq: [
+                    { text: "$$R_{\\text{effective}} = 8.30\\%$$", correct: true, expl: "Correct! You identified the 1.80% volatility surcharge." },
+                    { text: "$$R_{\\text{effective}} = 7.70\\%$$", correct: false, expl: "Incorrect. Don't forget to multiply $\\beta$ by $(1 + 0.50)$." },
+                    { text: "$$R_{\\text{effective}} = 9.20\\%$$", correct: false, expl: "Too high! Check the coefficient calculation." },
+                    { text: "$$R_{\\text{effective}} = 6.50\\%$$", correct: false, expl: "Incorrect. That excludes the volatility penalty!" }
+                ],
+                transferQuestion: "If $R_{\\text{base}} = 7.0\\%$, $\\beta = 1.0\\%$, and Volatility = 0.40, calculate total rate (enter number e.g. 8.4).",
+                transferAnswer: 8.4
+            },
+            telemetry: {
+                riskTier: "GREEN TIER TELEMETRY PROTECTED",
+                title: "Behavioral Telemetry & Privacy Shield",
+                desc: "An external seller agent requested psychological telemetry logs from your agent during a luxury gadget negotiation on Flipkart.",
+                math: "$$\\text{Privacy Leak Score} = 1 - e^{-\\lambda \\cdot \\text{ExposedMetrics}}$$ ",
+                question: "Question: Which OWNMIND action completely neutralizes dynamic price gouging?",
+                hint1: "OWNMIND strips outbound stress markers and urgency signals from your agent.",
+                hint2: "By sanitizing telemetry, the seller agent cannot calculate your maximum willingness to pay.",
+                hint3: "Synthetic telemetry substitution replaces your actual state with a neutral zero-urgency baseline.",
+                mcq: [
+                    { text: "Synthetic Telemetry Stripping (Zero-Urgency Proxy)", correct: true, expl: "Correct! Stripping emotional states prevents dynamic price gouging." },
+                    { text: "Allow full telemetry sharing for faster checkout", correct: false, expl: "Incorrect! Sharing stress logs lets sellers raise prices." },
+                    { text: "Block all communications permanently", correct: false, expl: "Incorrect. That stops the transaction entirely." },
+                    { text: "Increase agent automated spending limit", correct: false, expl: "Incorrect! That increases risk exposure." }
+                ],
+                transferQuestion: "If exposed metrics are reduced from 10 down to 0, what is the resulting Privacy Leak Score?",
+                transferAnswer: 0
+            }
+        };
+
+        let currentScenarioKey = 'mobility';
+        let currentScore = 100;
+        let hintsUnlocked = 0;
+
+        // INITIALIZATION
+        window.onload = function() {
+            loadScenario('mobility');
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ]
+            });
+        };
+
+        // TAB SWITCHING LOGIC
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('border-brand-blue', 'text-brand-blue', 'font-bold');
+                el.classList.add('border-transparent', 'text-slate-500');
+            });
+
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+            activeBtn.classList.add('border-brand-blue', 'text-brand-blue', 'font-bold');
+
+            // Re-render math dynamically after tab switch
+            setTimeout(() => {
+                renderMathInElement(document.getElementById(`view-${tabId}`), {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ]
+                });
+            }, 50);
+        }
+
+        // LOAD SCENARIO FUNCTION
+        function loadScenario(key) {
+            currentScenarioKey = key;
+            hintsUnlocked = 0;
+            currentScore = 100;
+            updateScoreUI();
+
+            const sc = scenarios[key];
+            
+            // Update buttons styling
+            document.querySelectorAll('.scen-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-blue', 'text-white', 'border-brand-blue');
+                btn.classList.add('bg-white', 'text-slate-700', 'border-slate-300');
+            });
+            const selectedBtn = document.getElementById(`scen-${key}`);
+            selectedBtn.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
+            selectedBtn.classList.add('bg-brand-blue', 'text-white', 'border-brand-blue');
+
+            // Update scenario details
+            document.getElementById('riskBadge').innerText = sc.riskTier;
+            document.getElementById('prob-title').innerText = sc.title;
+            document.getElementById('prob-desc').innerHTML = sc.desc;
+            document.getElementById('prob-math').innerHTML = sc.math;
+            document.getElementById('prob-question').innerHTML = sc.question;
+
+            // Reset attempt and hints
+            document.getElementById('userAttempt').value = '';
+            document.getElementById('attemptStatus').classList.add('hidden');
+
+            document.getElementById('text-hint-1').innerHTML = sc.hint1;
+            document.getElementById('text-hint-2').innerHTML = sc.hint2;
+            document.getElementById('text-hint-3').innerHTML = sc.hint3;
+
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById(`content-hint-${i}`).classList.add('hidden');
+                const btn = document.getElementById(`btn-hint-${i}`);
+                if (i === 1) {
+                    btn.disabled = false;
+                    btn.innerText = "Reveal Nudge";
+                    btn.className = "text-xs bg-amber-500 hover:bg-amber-600 text-white font-bold px-3 py-1.5 rounded-lg transition shadow-sm";
+                } else {
+                    btn.disabled = true;
+                    btn.innerText = "Locked";
+                    btn.className = "text-xs bg-slate-200 text-slate-400 font-bold px-3 py-1.5 rounded-lg cursor-not-allowed";
+                }
+            }
+
+            // Render MCQ options
+            const mcqBox = document.getElementById('mcq-options');
+            mcqBox.innerHTML = '';
+            sc.mcq.forEach((opt, idx) => {
+                const optBtn = document.createElement('button');
+                optBtn.className = "p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-300 text-left text-xs transition flex items-center justify-between";
+                optBtn.onclick = () => checkMCQ(idx);
+                optBtn.innerHTML = `<span>${opt.text}</span> <i class="fa-regular fa-circle text-slate-300"></i>`;
+                mcqBox.appendChild(optBtn);
+            });
+
+            document.getElementById('feedback-box').classList.add('hidden');
+
+            // Set transfer question
+            document.getElementById('transfer-question').innerHTML = sc.transferQuestion;
+            document.getElementById('transferInput').value = '';
+            document.getElementById('transferFeedback').classList.add('hidden');
+
+            // Highlight Bloom level 3
+            highlightBloom(3);
+
+            // Re-render KaTeX math
+            setTimeout(() => {
+                renderMathInElement(document.getElementById('view-sandbox'), {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ]
+                });
+            }, 50);
+        }
+
+        // SAVE USER ATTEMPT
+        function saveAttempt() {
+            const text = document.getElementById('userAttempt').value.trim();
+            if(!text) {
+                alert("Please log a quick mental sanity check or calculation idea first!");
+                return;
+            }
+            document.getElementById('attemptStatus').classList.remove('hidden');
+            highlightBloom(4); // Deconstruction phase
+        }
+
+        // REVEAL PROGRESSIVE HINT
+        function revealHint(level) {
+            if (level > hintsUnlocked + 1) return;
+
+            hintsUnlocked = level;
+            document.getElementById(`content-hint-${level}`).classList.remove('hidden');
+            const btn = document.getElementById(`btn-hint-${level}`);
+            btn.innerText = "Unlocked ✓";
+            btn.className = "text-xs bg-emerald-600 text-white font-bold px-3 py-1.5 rounded-lg";
+            btn.disabled = true;
+
+            // Unlock next hint button
+            if (level < 3) {
+                const nextBtn = document.getElementById(`btn-hint-${level + 1}`);
+                nextBtn.disabled = false;
+                nextBtn.innerText = "Reveal Next Nudge";
+                nextBtn.className = "text-xs bg-amber-500 hover:bg-amber-600 text-white font-bold px-3 py-1.5 rounded-lg transition shadow-sm";
+            }
+
+            // Deduct score slightly for taking hints
+            currentScore = Math.max(60, 100 - (hintsUnlocked * 12));
+            updateScoreUI();
+
+            highlightBloom(2); // Passive nudge phase
+
+            // Re-render math inside unlocked hint
+            renderMathInElement(document.getElementById(`content-hint-${level}`), {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ]
+            });
+        }
+
+        // CHECK MULTIPLE CHOICE PRACTICE ANSWER
+        function checkMCQ(index) {
+            const sc = scenarios[currentScenarioKey];
+            const selectedOpt = sc.mcq[index];
+            const feedbackBox = document.getElementById('feedback-box');
+
+            feedbackBox.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-800', 'bg-rose-50', 'text-rose-800', 'border-emerald-200', 'border-rose-200');
+
+            if (selectedOpt.correct) {
+                feedbackBox.classList.add('bg-emerald-50', 'text-emerald-800', 'border', 'border-emerald-200');
+                feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> <strong>Sovereign Approval Granted!</strong> ${selectedOpt.expl}`;
+                highlightBloom(5); // Audit phase
+            } else {
+                feedbackBox.classList.add('bg-rose-50', 'text-rose-800', 'border', 'border-rose-200');
+                feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 mr-1.5"></i> <strong>Logic Trap Detected!</strong> ${selectedOpt.expl} Try using Socratic Hint Ladder above!`;
+            }
+
+            renderMathInElement(feedbackBox, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ]
+            });
+        }
+
+        // CHECK TRANSFER UNASSISTED QUESTION
+        function checkTransfer() {
+            const inputVal = parseFloat(document.getElementById('transferInput').value);
+            const sc = scenarios[currentScenarioKey];
+            const feedback = document.getElementById('transferFeedback');
+            
+            feedback.classList.remove('hidden', 'text-emerald-600', 'text-rose-600');
+
+            if (isNaN(inputVal)) {
+                feedback.classList.add('text-rose-600');
+                feedback.innerText = "Please enter a valid numeric value!";
+                return;
+            }
+
+            // Allow +/- 1% numerical tolerance
+            const diff = Math.abs(inputVal - sc.transferAnswer);
+            if (diff <= (sc.transferAnswer * 0.02) || diff < 0.1) {
+                feedback.classList.add('text-emerald-600');
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Sovereign Logic Verified! Calculated ${inputVal} correctly without hints!`;
+                highlightBloom(6); // Sovereign Choice phase
+            } else {
+                feedback.classList.add('text-rose-600');
+                feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Check your math! Expected around ${sc.transferAnswer}.`;
+            }
+        }
+
+        // UPDATE SCORE DISPLAY
+        function updateScoreUI() {
+            document.getElementById('indepScore').innerText = `${currentScore}%`;
+            document.getElementById('headerHaiScore').innerText = `${currentScore}%`;
+            document.getElementById('scoreBar').style.width = `${currentScore}%`;
+            
+            const explanation = document.getElementById('scoreExplanation');
+            if (currentScore === 100) {
+                explanation.innerText = "Maximum Cognitive Sovereignty! Zero hints required.";
+            } else if (currentScore >= 80) {
+                explanation.innerText = "Great job! Minimal Socratic nudges needed.";
+            } else {
+                explanation.innerText = "Cognitive training active! Try evaluating the next scenario with fewer hints.";
+            }
+        }
+
+        // BLOOMS / SOVEREIGNTY TAXONOMY HIGHLIGHTER
+        function highlightBloom(level) {
+            for (let i = 1; i <= 6; i++) {
+                const el = document.getElementById(`bloom-${i}`);
+                if (el) {
+                    el.classList.remove('active');
+                }
+            }
+            const activeEl = document.getElementById(`bloom-${level}`);
+            if (activeEl) {
+                activeEl.classList.add('active');
+            }
+        }
+
+        // DOWNLOAD SUBMISSION SUMMARY
+        function downloadSubmission() {
+            const name = document.getElementById('userName').value || 'Alex Sharma';
+            
+            const summaryText = `OWNMIND - ZERO-TRUST COGNITIVE FIREWALL SUBMISSION SUMMARY\n` +
+                                `===========================================================\n` +
+                                `Candidate Name: ${name}\n` +
+                                `Target Horizon: Flipkart APM '29 Case Study (2040 Horizon)\n` +
+                                `Date: ${new Date().toLocaleDateString()}\n\n` +
+                                `Active Scenario: ${scenarios[currentScenarioKey].title}\n` +
+                                `Human Agency Index (HAI): ${currentScore}%\n` +
+                                `Socratic Nudges Used: ${hintsUnlocked}\n` +
+                                `Cognitive Sovereignty Level Reached: Level 5/6 (Critical Audit & Sovereign Choice)\n\n` +
+                                `Verified via OWNMIND Interactive Prototype Environment.`;
+
+            const blob = new Blob([summaryText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `OWNMIND_APM_Submission_${name.replace(/\s+/g, '_')}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
